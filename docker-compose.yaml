@@ -1,0 +1,26 @@
+version: '2.0'
+services:
+  subscription-manager:
+    container_name: subscription-manager
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    image: subscription-manager:latest
+    depends_on:
+      - postgres-db
+    env_file:
+      - .env
+    environment:
+      - DB_URL=$DB_HOST/$DB_NAME
+  postgres-db:
+    container_name: postgres-db
+    image: 'postgres'
+    restart: always
+    environment:
+      - POSTGRES_USER=$DB_USERNAME
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+    env_file:
+      - .env
+    tty: true
